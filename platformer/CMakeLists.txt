@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.30)
+project(peter_platformer VERSION 0.0.1 LANGUAGES CXX)
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME} PARENT_SCOPE)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME} PARENT_SCOPE)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME} PARENT_SCOPE)
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME})
+
+add_custom_target(copy_assets COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/Assets ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME}/Assets)
+
+add_executable(${PROJECT_NAME} src/main.cpp)
+
+add_dependencies(${PROJECT_NAME} copy_assets)
+target_link_libraries(${PROJECT_NAME} PRIVATE peter_game_framework)
+target_include_directories(${PROJECT_NAME} PRIVATE peter_game_framework)
