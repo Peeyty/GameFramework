@@ -7,6 +7,7 @@ class Actor
 {
     public:
     Actor(class Engine* currentEngine, const char* textureFileName, SDL_FRect source = SDL_FRect{0,0,32,32}, float w = 32, float h = 32, SDL_FRect Collision = SDL_FRect{0,0,32,32});
+    Actor(class Engine* currentEngine, SDL_Surface* surface, float w = 32, float h = 32, SDL_FRect Collision = SDL_FRect{0,0,32,32});
     ~Actor();
     SDL_Texture* texture;
     SDL_FRect SourceRect{0,0,32,32};
@@ -21,8 +22,8 @@ class Actor
     bool Grounded = false;
 
     void Render();
-    void Update(float DeltaTime);
+    virtual bool Update(float DeltaTime);
 
-    private:
+    protected:
     class Engine* engine;
 };

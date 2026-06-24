@@ -10,6 +10,12 @@ set(SDLIMAGE_AVIF OFF CACHE BOOL "" FORCE)
 FetchContent_Declare(SDL3_image GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git GIT_TAG ad58ecfc27a1bd09e510ceff8bbbdb1094806476)
 FetchContent_MakeAvailable(SDL3_image)
 
+FetchContent_Declare(SDL3_ttf GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git GIT_TAG a1ce3670aec736ecbf0936c43f2f0cc53aa61e5b)
+FetchContent_MakeAvailable(SDL3_ttf)
+
+FetchContent_Declare(SDL3_mixer GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git GIT_TAG 72a81869b45e249e8e67102db4e98dd2441f05a1)
+FetchContent_MakeAvailable(SDL3_mixer)
+
 FetchContent_Declare(imgui GIT_REPOSITORY https://github.com/ocornut/imgui.git GIT_TAG 6ded5230d043aa32c755e65c910c2af5002fb9f9)
 FetchContent_MakeAvailable(imgui)
 
@@ -58,6 +64,8 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
         SDL3::SDL3
         SDL3_image::SDL3_image
+        SDL3_ttf::SDL3_ttf
+        SDL3_mixer::SDL3_mixer
         imgui
         glm::glm
     PRIVATE

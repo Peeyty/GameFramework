@@ -1,6 +1,11 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include "PeterGameFramework/FrameworkActor.h"
+#include "PeterGameFramework/Camera.h"
+#include "PeterGameFramework/LevelLoader.h"
+#include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3_mixer/SDL_mixer.h>
+#include <glm/glm.hpp>
 #include <vector>
 #include <memory>
 
@@ -25,15 +30,24 @@ public:
      * \param height The height to give the window and state
      */
     bool Init(const char* windowTitle, int width, int height);
-    bool RenderFrameStart();
+    bool RenderFrameStart(glm::vec3 BackgroundColor = glm::vec3(0));
     bool RenderFrameEnd();
     bool HandleEvent(SDL_Event* event, bool* running);
     std::shared_ptr<Actor> CreateActor(const char* textureFileName, SDL_FRect source = SDL_FRect{0,0,32,32}, float w = 32, float h = 32, SDL_FRect Collision = SDL_FRect{0,0,32,32});
 
+    bool RenderText(std::string text, glm::vec2 ScreenPosition);
+    bool PlayAudio(std::string fileName, float volume = 1.0f, bool loop = false);
+
+    void UpdateAndRenderAllActors(float DeltaTime);
     void Shutdown();
     
+    TTF_Font* font;
+    MIX_Mixer* mixer;
+
     SDLState mainState;
     std::vector<std::shared_ptr<Actor>> AllActors;
+    Camera camera = Camera();
+    LevelLoader mapLoader = LevelLoader();
 
 };
 

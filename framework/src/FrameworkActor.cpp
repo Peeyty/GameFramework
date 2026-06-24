@@ -27,6 +27,29 @@ Actor::Actor(Engine *currentEngine, const char *textureFileName, SDL_FRect sourc
     RenderSize.y = h;
 }
 
+Actor::Actor(Engine *currentEngine, SDL_Surface *surface, float w, float h, SDL_FRect Collision)
+{
+    if (currentEngine == nullptr)
+    {
+        return;
+    }
+    engine = currentEngine;
+    texture = SDL_CreateTextureFromSurface(engine->mainState.renderer, surface);
+    if (texture == nullptr)
+    {
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", SDL_GetError(), nullptr);
+    }
+    SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_PIXELART);
+    SourceRect = SDL_FRect{0, 0, (float)texture->w, (float)texture->h};
+    CollisionBox = Collision;
+    if (CollisionBox.h == 0 || CollisionBox.w == 0)
+    {
+        HasCollision = false;
+    }
+    RenderSize.x = w;
+    RenderSize.y = h;
+}
+
 Actor::~Actor()
 {
     if (texture != nullptr)
@@ -37,22 +60,24 @@ Actor::~Actor()
 
 void Actor::Render()
 {
-    if (texture == nullptr)
+    if (texture == nullptr || engine == nullptr)
     {
         return;
     }
 
     SDL_FRect DestinationRect{ Position.x, Position.y, RenderSize.x, RenderSize.y};
+    DestinationRect.x -= engine->camera.Position.x;
+    DestinationRect.y -= engine->camera.Position.y;
 
     SDL_RenderTexture(engine->mainState.renderer, texture, &SourceRect, &DestinationRect);
 
 }
 
-void Actor::Update(float DeltaTime)
+bool Actor::Update(float DeltaTime)
 {
     if (!CanMove || DeltaTime > 0.01)
     {
-        return;
+        return true;
     }
     if (HasGravity)
     {
@@ -104,4 +129,5 @@ void Actor::Update(float DeltaTime)
             }
         }
     }
+    return true;
 }
